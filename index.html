@@ -4,82 +4,570 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prosite | Pr - للحلول الرقمية</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700;900&family=Noto+Kufi+Arabic:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #020617; color: #f8fafc; }
-        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        .accent-gradient { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
-        .input-style { background: #0f172a; border: 1px solid #1e293b; color: white; padding: 12px; border-radius: 12px; width: 100%; outline: none; transition: 0.3s; }
-        .input-style:focus { border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.2); }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --black: #0a0a0a;
+            --white: #f5f5f0;
+            --mid: #1a1a1a;
+            --border: #222;
+            --accent: #f5f5f0;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Noto Kufi Arabic', 'Space Grotesk', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom cursor */
+        .cursor {
+            width: 12px; height: 12px;
+            background: var(--white);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease;
+            mix-blend-mode: difference;
+        }
+        .cursor-trail {
+            width: 40px; height: 40px;
+            border: 1px solid rgba(245,245,240,0.3);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.4s ease, left 0.1s ease, top 0.1s ease;
+        }
+        body:hover .cursor { transform: scale(1); }
+        a:hover ~ .cursor, button:hover ~ .cursor { transform: scale(2.5); }
+
+        /* NAV */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 28px 48px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(10,10,10,0.92);
+            backdrop-filter: blur(20px);
+        }
+        .logo {
+            display: flex; align-items: center; gap: 14px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 900; font-size: 20px; letter-spacing: -0.03em;
+            color: var(--white); text-decoration: none;
+        }
+        .logo-badge {
+            width: 44px; height: 44px;
+            background: var(--white);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: 900;
+            color: var(--black);
+        }
+        .nav-tag {
+            font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+            color: rgba(245,245,240,0.35);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            justify-content: flex-end;
+            padding: 0 48px 64px;
+            padding-top: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Big PR background */
+        .hero-bg-pr {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 900;
+            font-size: clamp(300px, 45vw, 600px);
+            color: rgba(245,245,240,0.04);
+            letter-spacing: -0.06em;
+            line-height: 1;
+            user-select: none;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        /* Code brackets */
+        .hero-brackets {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 65vw; height: 65vw;
+            border: 1px solid rgba(245,245,240,0.04);
+            pointer-events: none;
+        }
+        .hero-brackets::before, .hero-brackets::after {
+            content: '';
+            position: absolute;
+            width: 40px; height: 40px;
+            border-color: rgba(245,245,240,0.12);
+            border-style: solid;
+        }
+        .hero-brackets::before {
+            top: -1px; left: -1px;
+            border-width: 2px 0 0 2px;
+        }
+        .hero-brackets::after {
+            bottom: -1px; right: -1px;
+            border-width: 0 2px 2px 0;
+        }
+
+        .hero-label {
+            font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase;
+            color: rgba(245,245,240,0.4);
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 24px;
+        }
+
+        .hero-title {
+            font-size: clamp(52px, 9vw, 120px);
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            max-width: 900px;
+            position: relative;
+        }
+        .hero-title .line2 {
+            display: block;
+            color: rgba(245,245,240,0.22);
+        }
+
+        .hero-sub {
+            margin-top: 40px;
+            display: flex; justify-content: space-between; align-items: flex-end;
+            flex-wrap: wrap; gap: 24px;
+        }
+        .hero-desc {
+            max-width: 380px;
+            font-size: 16px; line-height: 1.7;
+            color: rgba(245,245,240,0.5);
+            font-weight: 300;
+        }
+        .hero-cta {
+            display: inline-flex; align-items: center; gap: 12px;
+            background: var(--white); color: var(--black);
+            padding: 16px 32px;
+            font-weight: 700; font-size: 14px;
+            letter-spacing: 0.05em; text-transform: uppercase;
+            cursor: pointer; border: none;
+            transition: transform 0.2s, background 0.2s;
+            font-family: 'Space Grotesk', sans-serif;
+            text-decoration: none;
+        }
+        .hero-cta:hover { transform: translateY(-2px); background: #e0e0da; }
+        .hero-cta svg { transition: transform 0.2s; }
+        .hero-cta:hover svg { transform: translateX(-4px); }
+
+        /* MARQUEE */
+        .marquee-wrap {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 18px 0;
+            overflow: hidden;
+            background: var(--mid);
+        }
+        .marquee-track {
+            display: flex; width: max-content;
+            animation: marquee 20s linear infinite;
+        }
+        .marquee-item {
+            display: flex; align-items: center; gap: 32px;
+            padding: 0 32px;
+            font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase;
+            color: rgba(245,245,240,0.35);
+            font-family: 'Space Grotesk', sans-serif;
+            white-space: nowrap;
+        }
+        .marquee-dot { width: 4px; height: 4px; background: rgba(245,245,240,0.3); border-radius: 50%; flex-shrink: 0; }
+        @keyframes marquee { to { transform: translateX(-50%); } }
+
+        /* PACKAGES */
+        .packages {
+            padding: 120px 48px;
+        }
+        .section-header {
+            display: flex; justify-content: space-between; align-items: baseline;
+            margin-bottom: 64px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 24px;
+        }
+        .section-num {
+            font-size: 11px; letter-spacing: 0.2em;
+            color: rgba(245,245,240,0.25);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .section-title {
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 900; letter-spacing: -0.03em;
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            border: 1px solid var(--border);
+        }
+
+        .pkg-card {
+            padding: 48px 40px;
+            border-right: 1px solid var(--border);
+            position: relative;
+            transition: background 0.3s;
+            cursor: default;
+        }
+        .pkg-card:last-child { border-right: none; }
+        .pkg-card:hover { background: rgba(245,245,240,0.03); }
+        .pkg-card.featured { background: rgba(245,245,240,0.06); }
+
+        .pkg-tag {
+            display: inline-block;
+            font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+            color: rgba(245,245,240,0.35);
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            margin-bottom: 32px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .pkg-tag.active {
+            background: var(--white); color: var(--black);
+            border-color: var(--white);
+        }
+
+        .pkg-name {
+            font-size: 22px; font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+        .pkg-desc {
+            font-size: 14px; line-height: 1.7;
+            color: rgba(245,245,240,0.45);
+            font-weight: 300;
+            margin-bottom: 48px;
+            min-height: 60px;
+        }
+        .pkg-price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(42px, 5vw, 64px);
+            font-weight: 900; letter-spacing: -0.04em;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .pkg-currency {
+            font-size: 18px; font-weight: 400;
+            color: rgba(245,245,240,0.4);
+            display: block; margin-bottom: 40px;
+        }
+
+        .pkg-btn {
+            display: block; width: 100%;
+            padding: 14px;
+            text-align: center;
+            font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            cursor: pointer; border: none;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .pkg-btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: rgba(245,245,240,0.7);
+        }
+        .pkg-btn-outline:hover {
+            border-color: var(--white);
+            color: var(--white);
+        }
+        .pkg-btn-filled {
+            background: var(--white);
+            color: var(--black);
+        }
+        .pkg-btn-filled:hover { background: #e0e0da; }
+
+        /* ORDER */
+        .order-section {
+            padding: 0 48px 140px;
+        }
+        .order-inner {
+            border: 1px solid var(--border);
+            padding: 72px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        .order-left h2 {
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 900; letter-spacing: -0.03em;
+            line-height: 1.05;
+            margin-bottom: 20px;
+        }
+        .order-left p {
+            font-size: 15px; line-height: 1.7;
+            color: rgba(245,245,240,0.45);
+            font-weight: 300;
+        }
+        .order-right {}
+        .select-wrap {
+            position: relative;
+            margin-bottom: 16px;
+        }
+        .select-wrap select {
+            appearance: none;
+            width: 100%;
+            background: var(--mid);
+            border: 1px solid var(--border);
+            color: var(--white);
+            padding: 18px 48px 18px 20px;
+            font-size: 15px;
+            font-family: 'Noto Kufi Arabic', sans-serif;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .select-wrap select:focus, .select-wrap select:hover {
+            border-color: rgba(245,245,240,0.4);
+        }
+        .select-arrow {
+            position: absolute;
+            left: 18px; top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: rgba(245,245,240,0.4);
+            font-size: 12px;
+        }
+        .submit-btn {
+            display: flex; align-items: center; justify-content: space-between;
+            width: 100%;
+            background: var(--white);
+            color: var(--black);
+            padding: 20px 28px;
+            font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            cursor: pointer; border: none;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .submit-btn:hover { background: #e0e0da; transform: translateY(-1px); }
+        .submit-btn svg { transition: transform 0.2s; }
+        .submit-btn:hover svg { transform: translateX(-4px); }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px 48px;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 16px;
+        }
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 900; font-size: 16px; letter-spacing: -0.02em;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .footer-logo-badge {
+            width: 30px; height: 30px;
+            background: var(--white);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 900; color: var(--black);
+        }
+        .footer-right {
+            font-size: 12px;
+            color: rgba(245,245,240,0.25);
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        /* ANIMATIONS */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 900px) {
+            nav { padding: 20px 24px; }
+            .hero { padding: 100px 24px 48px; }
+            .packages { padding: 80px 24px; }
+            .packages-grid { grid-template-columns: 1fr; }
+            .pkg-card { border-right: none; border-bottom: 1px solid var(--border); }
+            .pkg-card:last-child { border-bottom: none; }
+            .order-section { padding: 0 24px 80px; }
+            .order-inner { grid-template-columns: 1fr; gap: 48px; padding: 40px 32px; }
+            footer { padding: 32px 24px; }
+        }
     </style>
 </head>
-<body class="selection:bg-blue-500 selection:text-white">
+<body>
 
-    <nav class="p-6 max-w-6xl mx-auto flex justify-between items-center">
-        <div class="text-2xl font-black tracking-tighter"><span class="bg-blue-600 px-2 py-1 rounded-lg text-white ml-2">Pr</span>PROSITE</div>
-        <div class="text-xs text-blue-400 font-mono tracking-widest uppercase">Expert Coding</div>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-trail" id="trail"></div>
+
+    <!-- NAV -->
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-badge">pr</div>
+            PROSITE
+        </a>
+        <span class="nav-tag">Digital Solutions</span>
     </nav>
 
-    <header class="py-20 text-center px-4">
-        <h1 class="text-5xl md:text-6xl font-black mb-6 leading-tight">حلول برمجية <br><span class="text-blue-500">احترافية وآمنة.</span></h1>
-        <p class="text-slate-400 max-w-xl mx-auto text-lg">اختر باقتك المفضلة وسيتم توجيهك لنموذج الطلب الخاص بها لضمان أعلى درجات الأمان والخصوصية.</p>
-    </header>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg-pr">pr</div>
+        <div class="hero-brackets"></div>
 
-    <!-- Pricing Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4 mb-24">
-        <!-- باقة 1 -->
-        <div class="glass p-8 rounded-3xl border-t-4 border-blue-500">
-            <h3 class="font-bold text-xl mb-2">قالب تعريفي</h3>
-            <div class="text-3xl font-black text-blue-400">99 ر.س</div>
-            <p class="text-slate-500 text-sm mt-4">واجهة واحدة، صورة واحدة، وقسم تعريفي متكامل لمشروعك.</p>
+        <div style="position:relative; z-index:2;">
+            <p class="hero-label fade-up">— حلول برمجية احترافية وآمنة</p>
+            <h1 class="hero-title fade-up" style="transition-delay:0.1s">
+                حلول برمجية
+                <span class="line2">احترافية.</span>
+            </h1>
+            <div class="hero-sub fade-up" style="transition-delay:0.2s">
+                <p class="hero-desc">اختر باقتك المفضلة وسيتم توجيهك لنموذج الطلب الخاص بها لضمان أعلى درجات الأمان والخصوصية.</p>
+                <a href="#packages" class="hero-cta">
+                    استعرض الباقات
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
         </div>
-        
-        <!-- باقة 2 -->
-        <div class="glass p-8 rounded-3xl border-t-4 border-emerald-500 relative scale-105">
-            <span class="absolute -top-4 left-1/2 -translate-x-1/2 bg-emerald-600 text-[10px] px-3 py-1 rounded-full font-bold uppercase">الأكثر طلباً</span>
-            <h3 class="font-bold text-xl mb-2">قالب التعريف المطور</h3>
-            <div class="text-3xl font-black text-emerald-400">150 ر.س</div>
-            <p class="text-slate-500 text-sm mt-4">يشمل صورتين احترافية و 4 نصوص تعريفية منسقة بعناية.</p>
-        </div>
+    </section>
 
-        <!-- باقة 3 -->
-        <div class="glass p-8 rounded-3xl border-t-4 border-purple-500">
-            <h3 class="font-bold text-xl mb-2">قالب الروابط</h3>
-            <div class="text-3xl font-black text-purple-400">75 ر.س</div>
-            <p class="text-slate-500 text-sm mt-4">صفحة تجمع كافة روابط تواصلك الاجتماعي في مكان واحد بتصميم أنيق.</p>
+    <!-- MARQUEE -->
+    <div class="marquee-wrap">
+        <div class="marquee-track">
+            <div class="marquee-item"><span>Expert Coding</span><span class="marquee-dot"></span><span>Web Development</span><span class="marquee-dot"></span><span>Digital Solutions</span><span class="marquee-dot"></span><span>تطوير المواقع</span><span class="marquee-dot"></span><span>حلول رقمية</span><span class="marquee-dot"></span><span>برمجة احترافية</span><span class="marquee-dot"></span></div>
+            <div class="marquee-item"><span>Expert Coding</span><span class="marquee-dot"></span><span>Web Development</span><span class="marquee-dot"></span><span>Digital Solutions</span><span class="marquee-dot"></span><span>تطوير المواقع</span><span class="marquee-dot"></span><span>حلول رقمية</span><span class="marquee-dot"></span><span>برمجة احترافية</span><span class="marquee-dot"></span></div>
         </div>
     </div>
 
-    <!-- Order Form Section -->
-    <section class="max-w-2xl mx-auto px-4 pb-20 text-center">
-        <div class="glass p-10 rounded-[2rem]">
-            <h2 class="text-2xl font-bold mb-8">بدء الطلب الآمن</h2>
-            
-            <p class="text-slate-400 mb-6 text-sm">يرجى اختيار الباقة المطلوبة ليتم توجيهك لنموذج الطلب الرسمي الخاص بها:</p>
+    <!-- PACKAGES -->
+    <section class="packages" id="packages">
+        <div class="section-header fade-up">
+            <span class="section-num">01 — الباقات</span>
+            <h2 class="section-title">اختر باقتك</h2>
+        </div>
+        <div class="packages-grid">
 
-            <div class="space-y-4">
-                <select id="packageSelect" class="input-style bg-[#0f172a] text-center">
-                    <option value="https://docs.google.com/forms/d/e/1FAIpQLScx-K9Up4Ez0UZDiAdpUi3kLxaVYCY9xa726CooD15NxsbsCg/viewform">قالب تعريفي (99 ريال)</option>
-                    <option value="https://docs.google.com/forms/d/e/1FAIpQLSeo-KJ8CAQvqQ6xLlhHq6EL2JlkEXPt12M7n1MPBiCBIe6aZQ/viewform">قالب التعريف المطور (150 ريال)</option>
-                    <option value="https://docs.google.com/forms/d/e/1FAIpQLSdGLFFKMrskFbNkOkKsgXAs26LXYg6db9clOPXamcLv3mOlNQ/viewform">قالب الروابط (75 ريال)</option>
-                </select>
+            <div class="pkg-card fade-up">
+                <span class="pkg-tag">Basic</span>
+                <h3 class="pkg-name">قالب تعريفي</h3>
+                <p class="pkg-desc">واجهة واحدة، صورة واحدة، وقسم تعريفي متكامل لمشروعك.</p>
+                <div class="pkg-price">99</div>
+                <span class="pkg-currency">ريال سعودي</span>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLScx-K9Up4Ez0UZDiAdpUi3kLxaVYCY9xa726CooD15NxsbsCg/viewform" target="_blank" class="pkg-btn pkg-btn-outline">اطلب الآن</a>
+            </div>
 
-                <button onclick="goToForm()" class="w-full accent-gradient p-4 rounded-xl font-bold text-white hover:opacity-90 transition transform active:scale-95 shadow-lg shadow-blue-500/20">
-                    الانتقال لنموذج الطلب
+            <div class="pkg-card featured fade-up" style="transition-delay:0.1s">
+                <span class="pkg-tag active">الأكثر طلباً</span>
+                <h3 class="pkg-name">قالب التعريف المطور</h3>
+                <p class="pkg-desc">يشمل صورتين احترافية و 4 نصوص تعريفية منسقة بعناية.</p>
+                <div class="pkg-price">150</div>
+                <span class="pkg-currency">ريال سعودي</span>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeo-KJ8CAQvqQ6xLlhHq6EL2JlkEXPt12M7n1MPBiCBIe6aZQ/viewform" target="_blank" class="pkg-btn pkg-btn-filled">اطلب الآن</a>
+            </div>
+
+            <div class="pkg-card fade-up" style="transition-delay:0.2s">
+                <span class="pkg-tag">Links</span>
+                <h3 class="pkg-name">قالب الروابط</h3>
+                <p class="pkg-desc">صفحة تجمع كافة روابط تواصلك الاجتماعي في مكان واحد بتصميم أنيق.</p>
+                <div class="pkg-price">75</div>
+                <span class="pkg-currency">ريال سعودي</span>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdGLFFKMrskFbNkOkKsgXAs26LXYg6db9clOPXamcLv3mOlNQ/viewform" target="_blank" class="pkg-btn pkg-btn-outline">اطلب الآن</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ORDER -->
+    <section class="order-section" id="order">
+        <div class="order-inner fade-up">
+            <div class="order-left">
+                <h2>بدء الطلب<br>الآمن.</h2>
+                <p>اختر الباقة المناسبة وسيتم توجيهك فوراً لنموذج الطلب الرسمي المشفّر لضمان خصوصيتك الكاملة.</p>
+            </div>
+            <div class="order-right">
+                <div class="select-wrap">
+                    <select id="packageSelect">
+                        <option value="https://docs.google.com/forms/d/e/1FAIpQLScx-K9Up4Ez0UZDiAdpUi3kLxaVYCY9xa726CooD15NxsbsCg/viewform">قالب تعريفي — 99 ريال</option>
+                        <option value="https://docs.google.com/forms/d/e/1FAIpQLSeo-KJ8CAQvqQ6xLlhHq6EL2JlkEXPt12M7n1MPBiCBIe6aZQ/viewform">قالب التعريف المطور — 150 ريال</option>
+                        <option value="https://docs.google.com/forms/d/e/1FAIpQLSdGLFFKMrskFbNkOkKsgXAs26LXYg6db9clOPXamcLv3mOlNQ/viewform">قالب الروابط — 75 ريال</option>
+                    </select>
+                    <span class="select-arrow">▾</span>
+                </div>
+                <button class="submit-btn" onclick="goToForm()">
+                    <span>الانتقال للنموذج</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </button>
             </div>
         </div>
     </section>
 
-    <footer class="py-10 border-t border-slate-900 text-center text-slate-600 text-xs">
-        © 2026 PROSITE | تطوير عبدالرحمن نسيم | Pr للحلول البرمجية
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">
+            <div class="footer-logo-badge">pr</div>
+            PROSITE
+        </div>
+        <span class="footer-right">© 2026 — تطوير عبدالرحمن نسيم</span>
     </footer>
 
     <script>
         function goToForm() {
-            const selectedUrl = document.getElementById('packageSelect').value;
-            window.open(selectedUrl, '_blank');
+            const url = document.getElementById('packageSelect').value;
+            window.open(url, '_blank');
         }
+
+        // Cursor
+        const cursor = document.getElementById('cursor');
+        const trail = document.getElementById('trail');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX - 6 + 'px';
+            cursor.style.top = e.clientY - 6 + 'px';
+            trail.style.left = e.clientX - 20 + 'px';
+            trail.style.top = e.clientY - 20 + 'px';
+        });
+
+        // Scroll animations
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // Trigger hero immediately
+        setTimeout(() => {
+            document.querySelectorAll('.hero .fade-up').forEach(el => el.classList.add('visible'));
+        }, 100);
+
+        // Pkg card direct links
+        document.querySelectorAll('.pkg-card').forEach(card => {
+            const btn = card.querySelector('.pkg-btn');
+            if (btn) {
+                card.addEventListener('click', (e) => {
+                    if (!e.target.closest('.pkg-btn')) btn.click();
+                });
+            }
+        });
     </script>
 </body>
 </html>
